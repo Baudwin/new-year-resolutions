@@ -1,0 +1,12 @@
+import { Module } from '@nestjs/common';
+import { AnonymousUserService } from './anonymous-user.service';
+import { AnonymousUserController } from './anonymous-user.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AnonymousUser } from './entities/anonymous-user.entity';
+
+@Module({
+    imports:[TypeOrmModule.forFeature([AnonymousUser])],
+  controllers: [AnonymousUserController],
+  providers: [AnonymousUserService],
+})
+export class AnonymousUserModule {}
