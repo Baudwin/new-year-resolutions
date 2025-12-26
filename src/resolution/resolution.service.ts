@@ -1,9 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { UpdateResolutionDto } from './dto/update-resolution.dto';
+import { Repository } from 'typeorm';
+import { Resolution } from './entities/resolution.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ResolutionService {
+
+    constructor(
+      @InjectRepository(Resolution)
+      private resolutionRepository:Repository<Resolution>
+    ){}
+
+
   create(createResolutionDto: CreateResolutionDto) {
     return 'This action adds a new resolution';
   }

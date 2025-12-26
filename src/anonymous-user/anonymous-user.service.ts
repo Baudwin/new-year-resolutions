@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAnonymousUserDto } from './dto/create-anonymous-user.dto';
 import { UpdateAnonymousUserDto } from './dto/update-anonymous-user.dto';
+import { Repository } from 'typeorm';
+import { AnonymousUser } from './entities/anonymous-user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AnonymousUserService {
-  create(createAnonymousUserDto: CreateAnonymousUserDto) {
-    return 'This action adds a new anonymousUser';
+
+   constructor (
+          @InjectRepository(AnonymousUser)
+          private anonUserRepository:Repository<AnonymousUser>
+          
+        ){}
+        
+
+  async create(): Promise<AnonymousUser> {
+    const newUser = this.anonUserRepository.create();
+    // console.log("in create anon user service")
+    return this.anonUserRepository.save(newUser);
   }
 
-  findAll() {
-    return `This action returns all anonymousUser`;
+  
+  findAll(): Promise<AnonymousUser[]> {
+    return this.anonUserRepository.find();
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} anonymousUser`;
+   
+  findOne(id: string): Promise<AnonymousUser | null> {
+    return this.anonUserRepository.findOneBy({ id });
   }
-
-  update(id: number, updateAnonymousUserDto: UpdateAnonymousUserDto) {
+  
+  update(id: string, updateAnonymousUserDto: UpdateAnonymousUserDto) {
     return `This action updates a #${id} anonymousUser`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} anonymousUser`;
+  async remove(id: string): Promise<void> {
+    await this.anonUserRepository.delete(id);
   }
 }

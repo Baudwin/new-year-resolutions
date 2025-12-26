@@ -7,10 +7,21 @@ import { AiResponseModule } from './ai-response/ai-response.module';
 import { ResolutionModule } from './resolution/resolution.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 
 @Module({
   imports: [
+
+     ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60000,
+          limit: 20,
+        },
+      ],
+    }),
 
     ConfigModule.forRoot({
       isGlobal:true
@@ -32,6 +43,12 @@ import { ConfigModule } from '@nestjs/config';
     
     AnonymousUserModule, ResolutionModule, AiResponseModule, UsageLimitModule],
   controllers: [AppController],
-  providers: [AppService],
+
+  providers: [
+    {
+    provide: APP_GUARD,
+    useClass: ThrottlerGuard
+  },
+    AppService],
 })
 export class AppModule {}
