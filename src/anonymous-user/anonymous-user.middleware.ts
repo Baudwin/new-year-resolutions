@@ -11,8 +11,7 @@ NestMiddleware{
     ){}
 
     async use(req: Request, res: Response, next: NextFunction) {
-    let anonUserId = req.cookies?.anon_id;
-
+    let anonUserId = req.cookies?.anon_user_id;
     if (!anonUserId) {
 
       const user = await this.anonymousUserService.create();
@@ -26,9 +25,10 @@ NestMiddleware{
         maxAge: 1000 * 60 * 60 * 24 * 365, 
       });
 
-      req['anonymousUser'] = user;
-      
-    } else {
+     req['anonymousUser'] = user;
+    } 
+    
+    else {
       const user = await this.anonymousUserService.findOne(anonUserId);
 
       if (!user) {
@@ -46,7 +46,7 @@ NestMiddleware{
         req['anonymousUser'] = user;
       }
     }
-
+    
     next();
   }
 
