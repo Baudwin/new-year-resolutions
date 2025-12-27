@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Req, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Req, BadRequestException, Query } from '@nestjs/common';
 import { Request } from 'express';
 import { ResolutionService } from './resolution.service';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
-import { UpdateResolutionDto } from './dto/update-resolution.dto';
 import { AnonymousUserService } from 'src/anonymous-user/anonymous-user.service';
 import { UsageLimitService } from 'src/usage-limit/usage-limit.service';
 import { OpenAiService } from 'src/open-ai-config/openai-config-service';
@@ -59,26 +58,15 @@ export class ResolutionController {
       createdAt: aiResponse.createdAt,
     },
   };
-  
+
   }
 
-  @Get()
-  findAll() {
-    return this.resolutionService.findAll();
+  @Get('public')
+  getPublicResolutions(
+    @Query('cursor') cursor?: string,
+  ) {
+    return this.resolutionService.getResolutions(cursor);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.resolutionService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateResolutionDto: UpdateResolutionDto) {
-    return this.resolutionService.update(+id, updateResolutionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.resolutionService.remove(+id);
-  }
+ 
 }

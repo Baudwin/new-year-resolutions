@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
-import { UpdateResolutionDto } from './dto/update-resolution.dto';
 import { Repository } from 'typeorm';
 import { Resolution } from './entities/resolution.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AnonymousUser } from 'src/anonymous-user/entities/anonymous-user.entity';
+import { PublicResolutionsResponse } from './dto/public-resolutions.dto';
+
+const PAGE_SIZE = 20;
 
 @Injectable()
 export class ResolutionService {
@@ -24,21 +26,57 @@ export class ResolutionService {
   )
     return this.resolutionRepository.save(newResolution)
   }
-  
+
+
+   async getResolutions( cursor?: string ): Promise<PublicResolutionsResponse> {
+    const query = this.resolutionRepository
+      .createQueryBuilder('r')
+      .select(['r.id', 'r.text', 'r.createdAt'])
+      .where('r.isPublic = true')
+      .orderBy('r.createdAt', 'DESC')
+      .addOrderBy('r.id', 'DESC')
+      .take(PAGE_SIZE + 1);
+
+    if (cursor) {
+      const decoded = Buffer.from(cursor, 'base64').toString('utf8');
+      const { createdAt, id } = JSON.parse(decoded);
+
+      query.andWhere(
+        '(r.createdAt < :createdAt OR (r.createdAt = :createdAt AND r.id < :id))',
+        { createdAt, id },
+      );
+    }
+
+    const results = await query.getMany();
+
+    let nextCursor: string | null = null;
+
+    if (results.length > PAGE_SIZE) {
+      const last = results[PAGE_SIZE - 1];
+
+      nextCursor = Buffer.from(
+        JSON.stringify({
+          createdAt: last.createdAt,
+          id: last.id,
+        }),
+      ).toString('base64');
+
+      results.pop();
+    }
+
+    return {
+      items: results.map((r) => ({
+        id: r.id,
+        text: r.text,
+      })),
+      nextCursor,
+    };
+  }
+
 
   findAll() {
     return `This action returns all resolution`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} resolution`;
-  }
 
-  update(id: number, updateResolutionDto: UpdateResolutionDto) {
-    return `This action updates a #${id} resolution`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} resolution`;
-  }
 }
