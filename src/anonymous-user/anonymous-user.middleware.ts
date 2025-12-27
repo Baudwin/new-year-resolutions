@@ -10,22 +10,44 @@ NestMiddleware{
         private anonymousUserService:AnonymousUserService
     ){}
 
-    async use(req:Request,res:Response,next:NextFunction){
-        const anonUserId = req.cookies?.anon_user_id
+    async use(req: Request, res: Response, next: NextFunction) {
+    let anonUserId = req.cookies?.anon_id;
 
-        if (anonUserId){
-            return next()
-        }
+    if (!anonUserId) {
 
-        const newUser = await this.anonymousUserService.create()
-        
-        res.cookie('anon_user_id', newUser.id,{
-            httpOnly:true,
-            sameSite:'none',
-            secure:process.env.NODE_ENV === 'production',
-            maxAge:1000*60*60*24*365
-        }) 
-   next()
+      const user = await this.anonymousUserService.create();
+
+      anonUserId = user.id;
+
+      res.cookie('anon_user_id', anonUserId, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24 * 365, 
+      });
+
+      req['anonymousUser'] = user;
+      
+    } else {
+      const user = await this.anonymousUserService.findOne(anonUserId);
+
+      if (!user) {
+
+        const newUser = await this.anonymousUserService.create();
+        res.cookie('anon_user_id', newUser.id, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24 * 365, 
+      });
+
+        req['anonymousUser'] = newUser;
+      } else {
+        req['anonymousUser'] = user;
+      }
     }
+
+    next();
+  }
 
 }

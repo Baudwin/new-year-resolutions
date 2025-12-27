@@ -21,13 +21,9 @@ export class ResolutionController {
  async create(@Body() createResolutionDto: CreateResolutionDto,
   @Req() req:Request
 ) {
-  const anonUserId = req.cookies.anon_user_id
-  if(!anonUserId){
-    throw new BadRequestException('User not found')
-  }
-  const anonymousUser = await this.anonymousUserService.findOne(anonUserId)
-
-   if(!anonymousUser){
+  const anonymousUser = req['anonymousUser'];
+  // console.log(anonUserId)
+  if(!anonymousUser){
     throw new BadRequestException('User not found')
   }
 
