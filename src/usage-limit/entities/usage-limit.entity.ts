@@ -3,11 +3,13 @@ import {
   Column,
   ManyToOne,
   PrimaryColumn,
+  JoinColumn,
 } from 'typeorm';
 import { AnonymousUser } from 'src/anonymous-user/entities/anonymous-user.entity';
 
 @Entity('usage_limits')
 export class UsageLimit {
+
   @PrimaryColumn('uuid', { name: 'anonymous_user_id' })
   anonymousUserId: string;
 
@@ -20,5 +22,6 @@ export class UsageLimit {
   @ManyToOne(() => AnonymousUser, (user) => user.usageLimits, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({name:'anonymous_user_id'})
   anonymousUser: AnonymousUser;
 }

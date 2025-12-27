@@ -4,6 +4,7 @@ import { UpdateResolutionDto } from './dto/update-resolution.dto';
 import { Repository } from 'typeorm';
 import { Resolution } from './entities/resolution.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AnonymousUser } from 'src/anonymous-user/entities/anonymous-user.entity';
 
 @Injectable()
 export class ResolutionService {
@@ -14,9 +15,16 @@ export class ResolutionService {
     ){}
 
 
-  create(createResolutionDto: CreateResolutionDto) {
-    return 'This action adds a new resolution';
+ async create(createResolutionDto: CreateResolutionDto, anonymousUser:AnonymousUser) {
+  const newResolution = this.resolutionRepository.create(
+    {text:createResolutionDto.text,
+      isPublic:createResolutionDto.isPublic,
+      anonymousUser
+    }
+  )
+    return this.resolutionRepository.save(newResolution)
   }
+  
 
   findAll() {
     return `This action returns all resolution`;

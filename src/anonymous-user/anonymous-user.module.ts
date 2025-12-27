@@ -9,6 +9,7 @@ import { AnonymousUserMiddleware } from './anonymous-user.middleware';
     imports:[TypeOrmModule.forFeature([AnonymousUser])],
   controllers: [AnonymousUserController],
   providers: [AnonymousUserService],
+  exports:[AnonymousUserService]
 })
 export class AnonymousUserModule implements NestModule {
   configure(consumer:MiddlewareConsumer){

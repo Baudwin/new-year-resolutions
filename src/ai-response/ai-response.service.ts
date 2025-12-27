@@ -1,26 +1,26 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAiResponseDto } from './dto/create-ai-response.dto';
-import { UpdateAiResponseDto } from './dto/update-ai-response.dto';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { AiResponse } from './entities/ai-response.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Resolution } from 'src/resolution/entities/resolution.entity';
 
 @Injectable()
 export class AiResponseService {
-  create(createAiResponseDto: CreateAiResponseDto) {
-    return 'This action adds a new aiResponse';
+  
+  constructor(
+    @InjectRepository(AiResponse)
+    private readonly aiResponseRepository:Repository<AiResponse>
+  ){}
+
+  async create(resolution: Resolution,responseText: string,model: string,):Promise<AiResponse>{
+    const newAiResponse = this.aiResponseRepository.create({
+      resolution,
+      responseText,
+      model
+    })
+
+    return this.aiResponseRepository.save(newAiResponse)
   }
 
-  findAll() {
-    return `This action returns all aiResponse`;
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} aiResponse`;
-  }
-
-  update(id: number, updateAiResponseDto: UpdateAiResponseDto) {
-    return `This action updates a #${id} aiResponse`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} aiResponse`;
-  }
 }

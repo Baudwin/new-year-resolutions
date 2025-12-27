@@ -8,5 +8,6 @@ import { UsageLimit } from './entities/usage-limit.entity';
   imports:[TypeOrmModule.forFeature([UsageLimit])],
   controllers: [UsageLimitController],
   providers: [UsageLimitService],
+  exports:[UsageLimitService]
 })
 export class UsageLimitModule {}

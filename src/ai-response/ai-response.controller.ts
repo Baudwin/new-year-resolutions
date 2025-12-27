@@ -7,28 +7,10 @@ import { UpdateAiResponseDto } from './dto/update-ai-response.dto';
 export class AiResponseController {
   constructor(private readonly aiResponseService: AiResponseService) {}
 
-  @Post()
-  create(@Body() createAiResponseDto: CreateAiResponseDto) {
-    return this.aiResponseService.create(createAiResponseDto);
+  // @Post()
+  // create(@Body() createAiResponseDto: CreateAiResponseDto) {
+  //   return this.aiResponseService.create(createAiResponseDto);
+  // }
+
   }
 
-  @Get()
-  findAll() {
-    return this.aiResponseService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.aiResponseService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAiResponseDto: UpdateAiResponseDto) {
-    return this.aiResponseService.update(+id, updateAiResponseDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.aiResponseService.remove(+id);
-  }
-}

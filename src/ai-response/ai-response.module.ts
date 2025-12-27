@@ -8,5 +8,6 @@ import { AiResponse } from './entities/ai-response.entity';
   imports:[TypeOrmModule.forFeature([AiResponse])],
   controllers: [AiResponseController],
   providers: [AiResponseService],
+  exports:[AiResponseService]
 })
 export class AiResponseModule {}

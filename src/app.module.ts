@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { OpenAiConfigModule } from './open-ai-config/open-ai-config.module';
 
 
 @Module({
@@ -41,7 +42,7 @@ import { APP_GUARD } from '@nestjs/core';
     }),
     
     
-    AnonymousUserModule, ResolutionModule, AiResponseModule, UsageLimitModule],
+    AnonymousUserModule, ResolutionModule, AiResponseModule, UsageLimitModule, OpenAiConfigModule],
   controllers: [AppController],
 
   providers: [

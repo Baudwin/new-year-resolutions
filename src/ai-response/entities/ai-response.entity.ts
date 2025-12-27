@@ -22,8 +22,8 @@ export class AiResponse {
   @Column()
   model: string;
 
-  @Column({ type: 'jsonb' })
-  responseJson: Record<string, any>;
+  @Column('text')
+  responseText: string;
 
   @CreateDateColumn()
   createdAt: Date;
