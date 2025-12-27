@@ -21,7 +21,7 @@ NestMiddleware{
         
         res.cookie('anon_user_id', newUser.id,{
             httpOnly:true,
-            sameSite:'lax',
+            sameSite:'none',
             secure:process.env.NODE_ENV === 'production',
             maxAge:1000*60*60*24*365
         }) 
