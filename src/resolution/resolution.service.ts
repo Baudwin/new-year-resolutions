@@ -79,4 +79,43 @@ export class ResolutionService {
   }
 
 
+  async findByIdAndUser(resolutionId: string, anonymousUser:AnonymousUser):Promise<Resolution>{
+    const resolution = await this.resolutionRepository.findOne({
+      where:{
+        id:resolutionId,
+        anonymousUser:{
+          id:anonymousUser.id
+        }
+      },
+      relations:{
+        aiResponse:true
+      }
+    })
+
+    return resolution
+  }
+
+
+
+  async getLatest(anonymousUser:AnonymousUser){
+    const latestResolution = await this.resolutionRepository.findOne(
+      {
+      where:{anonymousUser:{
+        id:anonymousUser.id
+      }},
+      order:{
+        createdAt:"DESC"
+      },
+      relations:{
+        aiResponse:true
+      }
+    }
+  )
+// console.log(anonymousUser)
+// console.log(latestResolution)
+    return latestResolution
+  }
+
+
+
 }

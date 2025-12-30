@@ -12,6 +12,7 @@ import { OpenAiConfigModule } from 'src/open-ai-config/open-ai-config.module';
   imports:[TypeOrmModule.forFeature([Resolution]), AnonymousUserModule, UsageLimitModule, AiResponseModule, OpenAiConfigModule],
   controllers: [ResolutionController],
   providers: [ResolutionService],
+  exports:[ResolutionService]
 })
 export class ResolutionModule {}
  

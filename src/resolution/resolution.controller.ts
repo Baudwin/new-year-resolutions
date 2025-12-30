@@ -64,5 +64,32 @@ export class ResolutionController {
     return this.resolutionService.getResolutions(cursor);
   }
 
- 
+
+
+  @Get('latest')
+  async getLatestResolution(
+    @Req() req:Request
+  ){
+    const anonymousUser = req['anonymousUser']
+    const resolution = await this.resolutionService.getLatest(anonymousUser)
+
+    if (!resolution) {
+      return null
+    }
+    return resolution
+  }
+
+
+  @Get(':resolutionId')
+  async getSingleResolution(
+    @Param('resolutionId') resolutionId:string,
+    @Req() req:Request
+  ){
+    const anonymousUser = req['anonymousUser']
+    const resolution = await this.resolutionService.findByIdAndUser(resolutionId, anonymousUser)
+
+    return resolution
+  }
+
+
 }
