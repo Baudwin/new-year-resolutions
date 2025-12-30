@@ -15,7 +15,7 @@ NestMiddleware{
 
 
     if (!anonUserId) {
-    console.log("Cookie doesnt exist")
+    // console.log("Cookie doesnt exist")
       const user = await this.anonymousUserService.create();
 
       anonUserId = user.id;
@@ -34,9 +34,9 @@ NestMiddleware{
     
     else {
       const user = await this.anonymousUserService.findOne(anonUserId);
-        console.log("finding user...")
+        // console.log("finding user...")
       if (!user) {
-        console.log("user doesnt exist")
+        // console.log("user doesnt exist")
         const newUser = await this.anonymousUserService.create();
         res.cookie('anon_user_id', newUser.id, {
         httpOnly: true, 
@@ -50,7 +50,7 @@ NestMiddleware{
         req['anonymousUser'] = newUser;
       } else {
         req['anonymousUser'] = user;
-        console.log("user exists")
+        // console.log("user exists")
       }
     }
     
