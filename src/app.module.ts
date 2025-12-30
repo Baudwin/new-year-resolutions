@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { OpenAiConfigModule } from './open-ai-config/open-ai-config.module';
+import { CheckinsModule } from './checkins/checkins.module';
 
 
 @Module({
@@ -19,7 +20,7 @@ import { OpenAiConfigModule } from './open-ai-config/open-ai-config.module';
       throttlers: [
         {
           ttl: 60000,
-          limit: 20,
+          limit: 500,
         },
       ],
     }),
@@ -52,7 +53,7 @@ import { OpenAiConfigModule } from './open-ai-config/open-ai-config.module';
   ),
     
     
-    AnonymousUserModule, ResolutionModule, AiResponseModule, UsageLimitModule, OpenAiConfigModule],
+    AnonymousUserModule, ResolutionModule, AiResponseModule, UsageLimitModule, OpenAiConfigModule, CheckinsModule],
   controllers: [AppController],
 
   providers: [
