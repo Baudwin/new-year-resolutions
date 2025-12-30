@@ -13,7 +13,6 @@ NestMiddleware{
     async use(req: Request, res: Response, next: NextFunction) {
     let anonUserId = req.cookies?.anon_user_id;
 
-    console.log(process.env.NODE_ENV)
 
     if (!anonUserId) {
     console.log("Cookie doesnt exist")
@@ -25,6 +24,7 @@ NestMiddleware{
         httpOnly: true,
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         secure: process.env.NODE_ENV === 'production',
+        path:'/',
         maxAge: 1000 * 60 * 60 * 24 * 365, 
       });
  
@@ -41,6 +41,7 @@ NestMiddleware{
         httpOnly: true, 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         secure: process.env.NODE_ENV === 'production',
+         path:'/',
         maxAge: 1000 * 60 * 60 * 24 * 365, 
       });
 
