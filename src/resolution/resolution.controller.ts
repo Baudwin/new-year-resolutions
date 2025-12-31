@@ -29,6 +29,7 @@ export class ResolutionController {
 
   await this.usageLimitService.checkUsageAndIncrement(anonymousUser)
 
+
     const resolution = await this.resolutionService.create(
       createResolutionDto,
       anonymousUser!
@@ -50,12 +51,17 @@ export class ResolutionController {
       createdAt: resolution.createdAt,
     },
     aiResponse: {
+      id:aiResponse.id,
       text: aiResponse.responseText,
       createdAt: aiResponse.createdAt,
     },
   };
 
   }
+
+
+
+
 
   @Get('public')
   getPublicResolutions(

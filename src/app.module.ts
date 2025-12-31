@@ -20,7 +20,7 @@ import { CheckinsModule } from './checkins/checkins.module';
       throttlers: [
         {
           ttl: 60000,
-          limit: 500,
+          limit: 1000,
         },
       ],
     }),

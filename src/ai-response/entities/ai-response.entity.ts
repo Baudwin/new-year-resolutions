@@ -25,6 +25,9 @@ export class AiResponse {
   @Column('text')
   responseText: string;
 
+  @Column({default:false})
+  isKept:boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 }

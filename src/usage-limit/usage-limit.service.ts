@@ -41,6 +41,7 @@ export class UsageLimitService {
         throw new ForbiddenException("You have exeeded your daily limit. Please try again tomorrow.")
       }
 
+
       existingUsage.aiRequestsCount +=1;
       await this.usageLimitRepository.save(existingUsage) 
 

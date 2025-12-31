@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { AiResponse } from './entities/ai-response.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,6 +20,33 @@ export class AiResponseService {
     })
 
     return this.aiResponseRepository.save(newAiResponse)
+  }
+
+
+  async keepResponse(responseId:string, anonUserId:string){
+    const response = await this.aiResponseRepository.findOne({
+      where:{
+        id:responseId,
+        resolution:{
+          anonymousUser:{
+            id:anonUserId
+          }
+        }
+      }, 
+      relations:{
+        resolution:{
+          anonymousUser:true
+        }
+      }
+    })
+
+    if (!response) {
+      throw new NotFoundException('Response not found')
+    }
+
+    response.isKept =true
+    await this.aiResponseRepository.save(response)
+    return {kept:true}
   }
 
 
